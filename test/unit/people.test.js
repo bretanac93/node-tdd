@@ -1,24 +1,12 @@
 require('dotenv').config();
-const mongoose = require('mongoose');
 const chai = require('chai');
 
 const { expect } = chai;
+const setup = require('../setup');
 const peopleRepository = require('../../src/repositories/people');
 
 describe('Database connection', () => {
-  before((done) => {
-    mongoose.connect(
-      process.env.DB_URL,
-      { useNewUrlParser: true },
-    );
-    mongoose.set('useCreateIndex', true);
-    const db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'Connection error'));
-    db.once('open', () => {
-      done();
-    });
-  });
-
+  setup();
   describe('People', () => {
     it('Creates a new Person', (done) => {
       peopleRepository
@@ -53,12 +41,6 @@ describe('Database connection', () => {
           done();
         })
         .catch(done);
-    });
-  });
-
-  after((done) => {
-    mongoose.connection.db.dropDatabase(() => {
-      mongoose.connection.close(done);
     });
   });
 });

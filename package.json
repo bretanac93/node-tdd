@@ -7,8 +7,8 @@
   "private": false,
   "scripts": {
     "dev": "nodemon server.js",
-    "tests:unit": "mocha --bail --timeout 15s test/unit/*.test.js",
-    "tests:api": "mocha --bail --timeout 15s test/features/*.test.js",
+    "tests:unit": "mocha --bail --exit --timeout 15s test/unit/*.test.js",
+    "tests:api": "mocha --bail --exit --timeout 15s test/features/*.test.js",
     "tests": "yarn tests:unit && yarn tests:api"
   },
   "dependencies": {

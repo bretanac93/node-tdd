@@ -13,22 +13,22 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 
 if (process.env.APP_ENV !== 'test') {
   app.use(morgan('combined'));
-}
 
-mongoose.Promise = global.Promise;
-mongoose.connect(
-  process.env.DB_URL,
-  { useNewUrlParser: true },
-  (err) => {
-    if (err) {
-      console.error.bind(console, err.toString());
-    }
-    console.log('Connected to the db');
-  },
-);
+  mongoose.Promise = global.Promise;
+  mongoose.connect(
+    process.env.DB_URL,
+    { useNewUrlParser: true },
+    (err) => {
+      if (err) {
+        console.error.bind(console, err.toString());
+      }
+      console.log('Connected to the db');
+    },
+  );
+}
 
 require('./src/routes')(app);
 
-app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
