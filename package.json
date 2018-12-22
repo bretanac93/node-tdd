@@ -7,21 +7,26 @@
   "private": false,
   "scripts": {
     "dev": "nodemon server.js",
-    "test": "mocha tests/**/*.test.js"
+    "tests:unit": "mocha --bail --timeout 15s test/unit/*.test.js",
+    "tests:api": "mocha --bail --timeout 15s test/features/*.test.js",
+    "tests": "yarn tests:unit && yarn tests:api"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "mocha": "^5.2.0",
-    "mongoose": "^5.4.0"
+    "mongoose": "^5.4.0",
+    "morgan": "^1.9.1"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-mocha": "^5.2.0",
+    "eslint-plugin-prettier": "^3.0.0",
     "nodemon": "^1.18.9"
   }
 }
