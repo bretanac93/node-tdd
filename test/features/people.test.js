@@ -19,13 +19,28 @@ describe('Main page', () => {
         done();
       });
   });
+  it('should POST a person', (done) => {
+    chai
+      .request(server)
+      .post('/people')
+      .send({
+        name: 'John Doe',
+        age: 32,
+        email: 'john.doe@example.test',
+        bio: 'Really proactive guy',
+      })
+      .end((err, res) => {
+        expect(res.status).equal(201);
+        done();
+      })
+  });
   it('should GET people collection', (done) => {
     chai
       .request(server)
       .get('/people')
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.data).to.empty;
+        expect(res.body.data.length).equal(1);
         done();
       });
   });

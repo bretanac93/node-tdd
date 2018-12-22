@@ -1,22 +1,25 @@
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
+let mongoServer;
 
 module.exports = () => {
   before((done) => {
-    mongoose.connect(
-      process.env.DB_URL,
-      { useNewUrlParser: true },
-    );
-    mongoose.set('useCreateIndex', true);
-    const db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'Connection error'));
-    db.once('open', () => {
-      done();
+    mongoServer = new MongoMemoryServer();
+    mongoServer.getConnectionString().then((mongoUri) => {
+      return mongoose
+        .connect(
+          mongoUri,
+          { useNewUrlParser: true },
+        )
+        .then(() => done())
+        .catch((err) => done);
     });
   });
 
   after((done) => {
-    mongoose.connection.db.dropDatabase(() => {
-      mongoose.connection.close(done);
+    mongoose.disconnect().then(() => {
+      mongoServer.stop().then(() => done());
     });
   });
 };

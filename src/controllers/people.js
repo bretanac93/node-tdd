@@ -1,6 +1,7 @@
 const peopleRepository = require('../repositories/people');
 
 function handleErrors(res, error) {
+  console.log(error.toString());
   res.status(400).json({
     error: error.toString(),
   });
@@ -24,7 +25,17 @@ async function getOne(req, res) {
   }
 }
 
+async function create(req, res) {
+  try {
+    const person = await peopleRepository.create(req.body);
+    res.status(201).json({ data: person });
+  } catch (error) {
+    handleErrors(res, error);
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
+  create,
 };
