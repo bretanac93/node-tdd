@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 const chai = require('chai');
 
 const { expect } = chai;
-const Person = require('../../src/models/Person');
+const peopleRepository = require('../../src/repositories/people');
 
 describe('Database Tests', () => {
-  before((done) => {
-    mongoose.connect(process.env.DB_URL, { useNewUrlParser: true });
+  before(done => {
+    mongoose.connect(
+      process.env.DB_URL,
+      { useNewUrlParser: true }
+    );
     mongoose.set('useCreateIndex', true);
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'Connection error'));
@@ -18,18 +21,25 @@ describe('Database Tests', () => {
   });
 
   describe('Test Database', () => {
-    it('New person saved to test database', (done) => {
-      const p = new Person({
-        name: 'John Doe',
-        age: 32,
-        email: 'john.doe@example.test',
-        bio: 'Really proactive guy'
-      });
-      p.save(done);
+    it('New person saved to test database', done => {
+      peopleRepository
+        .create({
+          name: 'John Doe',
+          age: 32,
+          email: 'john.doe@example.test',
+          bio: 'Really proactive guy',
+        })
+        .then(person => {
+          expect(person.email).to.equal('john.doe@example.test');
+          done();
+        })
+        .catch(error => {
+          done();
+        });
     });
   });
 
-  after((done) => {
+  after(done => {
     mongoose.connection.db.dropDatabase(() => {
       mongoose.connection.close(done);
     });
